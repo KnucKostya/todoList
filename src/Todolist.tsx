@@ -5,8 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import {Delete} from '@mui/icons-material';
 import {FilterValuesType} from './App';
-import {TaskStatuses, TaskType} from "./api/todolist-api";
 import {Task} from "./Task";
+import {TaskStatuses, TaskType} from "./state/tasks-reducer";
 
 // export type  = {
 //     id: string
@@ -20,7 +20,7 @@ type PropsType = {
     tasks: Array<TaskType>
     changeFilter: (value: FilterValuesType, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
-    changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
+    changeTaskStatus: (id: string, isDone: TaskStatuses, todolistId: string) => void
     changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
     removeTask: (taskId: string, todolistId: string) => void
     removeTodolist: (id: string) => void

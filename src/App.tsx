@@ -15,12 +15,11 @@ import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
-    removeTodolistAC, TodolistType
-} from './state/todolists-reducer';
-import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from './state/tasks-reducer';
+    removeTodolistAC, TodolistType} from './state/todolists-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskStatuses} from './state/tasks-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './state/store';
-import {TaskType} from "./api/todolist-api";
+import {TaskType} from "./state/tasks-reducer";
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
@@ -47,7 +46,7 @@ function App() {
         dispatch(action);
     }, []);
 
-    const changeStatus = useCallback(function (id: string, isDone: boolean, todolistId: string) {
+    const changeStatus = useCallback(function (id: string, isDone: TaskStatuses, todolistId: string) {
         const action = changeTaskStatusAC(id, isDone, todolistId);
         dispatch(action);
     }, []);

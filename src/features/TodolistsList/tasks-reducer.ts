@@ -75,6 +75,7 @@ export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsT
             dispatch(SetStatusAC('succeeded'))
         })
 }
+//
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(SetStatusAC('loading'))
     dispatch(setEntityStatusAC(todolistId,taskId,"loading"))

@@ -24,10 +24,14 @@ export const Task = React.memo((props: TaskPropsType) => {
             checked={props.task.status === TaskStatuses.Completed}
             color="primary"
             onChange={onChangeHandler}
+            disabled={(props.entityStatus || props.todoEntityStatus) === 'loading'}
         />
 
-        <EditableSpan value={props.task.title} onChange={onTitleChangeHandler}/>
-        <IconButton onClick={onClickHandler} disabled={props.entityStatus === 'loading'}>
+        <EditableSpan value={props.task.title} onChange={onTitleChangeHandler}
+                      entityStatus={props.entityStatus}
+                      todoEntityStatus={props.todoEntityStatus}
+        />
+        <IconButton onClick={onClickHandler} disabled={(props.entityStatus || props.todoEntityStatus) === 'loading'}>
             <Delete/>
         </IconButton>
     </div>
@@ -40,5 +44,6 @@ type TaskPropsType = {
     changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
     changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
     removeTask: (taskId: string, todolistId: string) => void
-    entityStatus:RequestStatusType
+    entityStatus?:RequestStatusType
+    todoEntityStatus?:RequestStatusType
 }

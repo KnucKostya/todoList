@@ -7,7 +7,7 @@ import {
     SetStatusAC,
     SetStatusActionType
 } from "../../app/app-reducer";
-import {CustomizedSnackbars} from "../../components/ErrorSnackBar/ErrorSnackBar";
+import {AxiosError} from "axios";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -54,11 +54,20 @@ export const fetchTodolistsTC = () => {
     return (dispatch: Dispatch<ActionsType>) => {
         dispatch(SetStatusAC('loading'))
         todolistsAPI.getTodolists()
-
             .then((res) => {
-                dispatch(setTodolistsAC(res.data))
-                dispatch(SetStatusAC('succeeded'))
+                if(res) {
+                    dispatch(setTodolistsAC(res.data))
+                    dispatch(SetStatusAC('succeeded'))
+                }
+                else{
+                    dispatch(SetStatusAC('failed'))
+                    dispatch(SetErrorAC('some error'))
+                }
             })
+            .catch(err=>{
+                dispatch(SetErrorAC(err.message))
+            })
+
     }
 }
 export const removeTodolistTC = (todolistId: string) => {
@@ -76,12 +85,11 @@ export const removeTodolistTC = (todolistId: string) => {
                     dispatch(SetErrorAC('some error'))
                 }
             })
-            .catch((err) => {
-                if(err.length){
+            .catch((err: AxiosError) => {
                     dispatch(SetStatusAC('failed'))
                     dispatch(changeEntityStatusAC(todolistId, 'failed'))
                     dispatch(SetErrorAC(err.message))
-                }})
+                })
             }
     }
 
@@ -102,9 +110,11 @@ export const addTodolistTC = (title: string) => {
                 }
                 dispatch(SetStatusAC('succeeded'))
             })
-            .catch(err=>{
-                dispatch(SetErrorAC(err.data.messages[0]))
-                // !!!!!!!!!!!!!!!!!!!!! крашится приложение при оффлайне
+            .catch((err:AxiosError)=>{
+                dispatch(SetErrorAC(err.message))
+            })
+            .finally(()=>{
+                dispatch(SetStatusAC('succeeded'))
             })
     }
 }
@@ -152,6 +162,6 @@ type ActionsType =
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodolistDomainType = TodolistType & {
-    filter: FilterValuesType,
+    filter: FilterValuesType
     entityStatus: RequestStatusType
 }
